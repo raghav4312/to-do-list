@@ -83,6 +83,7 @@ function addTask(e)
         taskList.appendChild(li);
 
         //store the task in local storge
+        console.log(taskInput.value+" ("+dateInput.value+")");
         storeTask(taskInput.value+" ("+dateInput.value+")");
 
         //clear the input form
@@ -101,13 +102,35 @@ function delTask(e)
 
         if(confirm('Are You Sure?'))
         {
-            e.target.parentElement.parentElement.parentElement.remove();
-
             removeTask(e.target.parentElement.parentElement.parentElement);
+
+            e.target.parentElement.parentElement.parentElement.remove();
+           
         }
     }
     
 }
+
+function removeTask(taskItems)
+{
+    let tasks;
+    let ind = taskItems.textContent.length;
+    let val = taskItems.textContent.substring(0,ind-1);
+    
+
+    tasks = JSON.parse(localStorage.getItem("tasks"));
+    
+
+    tasks.forEach(function(task,index){
+        if(val === task)
+        {
+           tasks.splice(index,1);
+        }
+    })
+    
+    localStorage.setItem("tasks",JSON.stringify(tasks));
+}
+
 
 function clearTask(e)
 {
@@ -143,25 +166,7 @@ function storeTask(task)
     localStorage.setItem("tasks",JSON.stringify(tasks));
 }
 
-function removeTask(taskItems)
-{
-    let tasks;
-    if(localStorage.getItem("tasks")===null)
-    {
-        tasks=[];
-    }
-    else{
-        tasks = JSON.parse(localStorage.getItem("tasks"));
-    }
 
-    tasks.forEach(function(task){
-        if(taskItems.textContent === task){
-            task.splice(index,1);
-        }
-    })
-
-    localStorage.setItem("tasks",JSON.stringify(tasks));
-}
 
 function filterTasks(e) {
     const text = e.target.value.toLowerCase();
